@@ -1,0 +1,11 @@
+12.2
+Linux-PAM-dev
+bison
+flex
+libxml2-dev
+libxslt-bin
+openssl-dev
+pkgconfig(zlib)
+python3-dev
+readline-dev
+systemd-dev
