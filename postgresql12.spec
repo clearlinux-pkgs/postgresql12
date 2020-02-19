@@ -4,16 +4,21 @@
 #
 Name     : postgresql12
 Version  : 12.2
-Release  : 1
+Release  : 2
 URL      : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
 Source0  : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
+Source1  : postgresql12-install.service
+Source2  : postgresql12.service
+Source3  : postgresql12.tmpfiles
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : PostgreSQL TCL
+Requires: postgresql12-config = %{version}-%{release}
 Requires: postgresql12-data = %{version}-%{release}
 Requires: postgresql12-lib = %{version}-%{release}
 Requires: postgresql12-libexec = %{version}-%{release}
 Requires: postgresql12-license = %{version}-%{release}
+Requires: postgresql12-services = %{version}-%{release}
 BuildRequires : Linux-PAM-dev
 BuildRequires : bison
 BuildRequires : flex
@@ -36,6 +41,14 @@ PostgreSQL Database Management System
 =====================================
 This directory contains the source code distribution of the PostgreSQL
 database management system.
+
+%package config
+Summary: config components for the postgresql12 package.
+Group: Default
+
+%description config
+config components for the postgresql12 package.
+
 
 %package data
 Summary: data components for the postgresql12 package.
@@ -71,6 +84,7 @@ lib components for the postgresql12 package.
 %package libexec
 Summary: libexec components for the postgresql12 package.
 Group: Default
+Requires: postgresql12-config = %{version}-%{release}
 Requires: postgresql12-license = %{version}-%{release}
 
 %description libexec
@@ -85,6 +99,14 @@ Group: Default
 license components for the postgresql12 package.
 
 
+%package services
+Summary: services components for the postgresql12 package.
+Group: Systemd services
+
+%description services
+services components for the postgresql12 package.
+
+
 %prep
 %setup -q -n postgresql-12.2
 cd %{_builddir}/postgresql-12.2
@@ -95,7 +117,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1581707309
+export SOURCE_DATE_EPOCH=1582138297
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -119,12 +141,17 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1581707309
+export SOURCE_DATE_EPOCH=1582138297
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/postgresql12
 cp %{_builddir}/postgresql-12.2/COPYRIGHT %{buildroot}/usr/share/package-licenses/postgresql12/97edc29bfb0112955a6b38640bea4882de01f3b9
 cp %{_builddir}/postgresql-12.2/src/backend/regex/COPYRIGHT %{buildroot}/usr/share/package-licenses/postgresql12/9ca05e9c70d9823e191d9b3876ecdeb57c53c725
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/postgresql12-install.service
+install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/postgresql12.service
+mkdir -p %{buildroot}/usr/lib/tmpfiles.d
+install -m 0644 %{SOURCE3} %{buildroot}/usr/lib/tmpfiles.d/postgresql12.conf
 
 %files
 %defattr(-,root,root,-)
@@ -145,6 +172,10 @@ cp %{_builddir}/postgresql-12.2/src/backend/regex/COPYRIGHT %{buildroot}/usr/sha
 /usr/lib64/postgresql12/pkgconfig/libecpg_compat.pc
 /usr/lib64/postgresql12/pkgconfig/libpgtypes.pc
 /usr/lib64/postgresql12/pkgconfig/libpq.pc
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/tmpfiles.d/postgresql12.conf
 
 %files data
 %defattr(-,root,root,-)
@@ -1689,3 +1720,8 @@ cp %{_builddir}/postgresql-12.2/src/backend/regex/COPYRIGHT %{buildroot}/usr/sha
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/postgresql12/97edc29bfb0112955a6b38640bea4882de01f3b9
 /usr/share/package-licenses/postgresql12/9ca05e9c70d9823e191d9b3876ecdeb57c53c725
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/postgresql12-install.service
+/usr/lib/systemd/system/postgresql12.service
