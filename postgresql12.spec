@@ -4,7 +4,7 @@
 #
 Name     : postgresql12
 Version  : 12.2
-Release  : 2
+Release  : 3
 URL      : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
 Source0  : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
 Source1  : postgresql12-install.service
@@ -37,10 +37,16 @@ BuildRequires : systemd-dev
 Patch1: 0001-Move-socket-to-run-postgresql.patch
 
 %description
-PostgreSQL Database Management System
-=====================================
-This directory contains the source code distribution of the PostgreSQL
-database management system.
+SP-GiST is an abbreviation of space-partitioned GiST.  It provides a
+generalized infrastructure for implementing space-partitioned data
+structures, such as quadtrees, k-d trees, and radix trees (tries).  When
+implemented in main memory, these structures are usually designed as a set of
+dynamically-allocated nodes linked by pointers.  This is not suitable for
+direct storing on disk, since the chains of pointers can be rather long and
+require too many disk accesses. In contrast, disk based data structures
+should have a high fanout to minimize I/O.  The challenge is to map tree
+nodes to disk pages in such a way that the search algorithm accesses only a
+few disk pages, even if it traverses many nodes.
 
 %package config
 Summary: config components for the postgresql12 package.
@@ -64,6 +70,7 @@ Group: Development
 Requires: postgresql12-lib = %{version}-%{release}
 Requires: postgresql12-data = %{version}-%{release}
 Provides: postgresql12-devel = %{version}-%{release}
+Requires: postgresql12 = %{version}-%{release}
 Requires: postgresql12 = %{version}-%{release}
 
 %description dev
@@ -117,7 +124,8 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1582138297
+export SOURCE_DATE_EPOCH=1585231453
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -140,8 +148,15 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 --with-pam
 make  %{?_smp_mflags}
 
+%check
+export LANG=C.UTF-8
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+make check
+
 %install
-export SOURCE_DATE_EPOCH=1582138297
+export SOURCE_DATE_EPOCH=1585231453
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/postgresql12
 cp %{_builddir}/postgresql-12.2/COPYRIGHT %{buildroot}/usr/share/package-licenses/postgresql12/97edc29bfb0112955a6b38640bea4882de01f3b9
