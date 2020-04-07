@@ -13,6 +13,7 @@ Configure miss: whether strerror_r returns int
 Configure miss: library containing setproctitle
 Configure miss: library containing shl_load
 Configure miss: CRYPTO_lock
+Configure miss: uuid_generate
 Configure miss: atomic.h usability
 Configure miss: atomic.h presence
 Configure miss: atomic.h

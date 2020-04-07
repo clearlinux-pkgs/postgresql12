@@ -9,3 +9,4 @@ pkgconfig(zlib)
 python3-dev
 readline-dev
 systemd-dev
+util-linux-dev

@@ -4,7 +4,7 @@
 #
 Name     : postgresql12
 Version  : 12.2
-Release  : 5
+Release  : 6
 URL      : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
 Source0  : https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2
 Source1  : postgresql12-install.service
@@ -35,6 +35,7 @@ BuildRequires : pkgconfig(zlib)
 BuildRequires : python3-dev
 BuildRequires : readline-dev
 BuildRequires : systemd-dev
+BuildRequires : util-linux-dev
 Patch1: 0001-Move-socket-to-run-postgresql.patch
 
 %description
@@ -126,14 +127,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1585348603
+export SOURCE_DATE_EPOCH=1586286750
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static --prefix=/usr/share/postgresql12 \
 --bindir=/usr/libexec/postgresql12 \
@@ -146,7 +147,8 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 --with-systemd \
 --with-openssl \
 --with-python \
---with-pam
+--with-pam \
+--with-uuid=e2fs
 make  %{?_smp_mflags}  world
 
 %check
@@ -157,7 +159,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make check-world || :
 
 %install
-export SOURCE_DATE_EPOCH=1585348603
+export SOURCE_DATE_EPOCH=1586286750
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/postgresql12
 cp %{_builddir}/postgresql-12.2/COPYRIGHT %{buildroot}/usr/share/package-licenses/postgresql12/97edc29bfb0112955a6b38640bea4882de01f3b9
@@ -415,6 +417,10 @@ install -m 0644 %{SOURCE3} %{buildroot}/usr/lib/tmpfiles.d/postgresql12.conf
 /usr/share/postgresql12/extension/unaccent--1.1.sql
 /usr/share/postgresql12/extension/unaccent--unpackaged--1.0.sql
 /usr/share/postgresql12/extension/unaccent.control
+/usr/share/postgresql12/extension/uuid-ossp--1.0--1.1.sql
+/usr/share/postgresql12/extension/uuid-ossp--1.1.sql
+/usr/share/postgresql12/extension/uuid-ossp--unpackaged--1.0.sql
+/usr/share/postgresql12/extension/uuid-ossp.control
 /usr/share/postgresql12/information_schema.sql
 /usr/share/postgresql12/pg_hba.conf.sample
 /usr/share/postgresql12/pg_ident.conf.sample
@@ -3141,6 +3147,7 @@ install -m 0644 %{SOURCE3} %{buildroot}/usr/lib/tmpfiles.d/postgresql12.conf
 /usr/lib64/postgresql12/utf8_and_sjis2004.so
 /usr/lib64/postgresql12/utf8_and_uhc.so
 /usr/lib64/postgresql12/utf8_and_win.so
+/usr/lib64/postgresql12/uuid-ossp.so
 
 %files libexec
 %defattr(-,root,root,-)

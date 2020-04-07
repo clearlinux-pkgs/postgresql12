@@ -10,3 +10,4 @@
 --with-openssl
 --with-python
 --with-pam
+--with-uuid=e2fs
