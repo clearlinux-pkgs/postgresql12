@@ -1,8 +1,7 @@
-12.2
+12.3
 Linux-PAM-dev
 bison
 flex
-libxml2-dev
 libxslt-bin
 openssl-dev
 pkgconfig(zlib)

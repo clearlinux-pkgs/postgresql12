@@ -9,6 +9,7 @@ Configure miss: whether to build with BSD Authentication support
 Configure miss: whether to build with LDAP support
 Configure miss: whether to build with Bonjour support
 Configure miss: whether to build with SELinux support
+Configure miss: whether to build with XML support
 Configure miss: whether strerror_r returns int
 Configure miss: library containing setproctitle
 Configure miss: library containing shl_load
