@@ -59,5 +59,4 @@ Configure miss: uint64
 Configure miss: __cpuid
 Configure miss: __crc32cb, __crc32ch, __crc32cw, and __crc32cd with CFLAGS=
 Configure miss: __crc32cb, __crc32ch, __crc32cw, and __crc32cd with CFLAGS=-march=armv8-a+crc
-Configure miss: DocBook XML V4.2
 Configure miss: dbtoepub

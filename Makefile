@@ -1,5 +1,5 @@
 PKG_NAME := postgresql12
-URL = https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2
+URL = https://ftp.postgresql.org/pub/source/v12.6/postgresql-12.6.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common
