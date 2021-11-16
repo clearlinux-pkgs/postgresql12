@@ -4,7 +4,7 @@
 #
 Name     : postgresql12
 Version  : 12.8
-Release  : 16
+Release  : 17
 URL      : https://ftp.postgresql.org/pub/source/v12.8/postgresql-12.8.tar.gz
 Source0  : https://ftp.postgresql.org/pub/source/v12.8/postgresql-12.8.tar.gz
 Source1  : postgresql12-install.service
